@@ -2,6 +2,7 @@ package team.lodestar.sage.client.gui.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 
 import java.awt.*;
@@ -10,16 +11,23 @@ import java.awt.*;
 public class TextComponent extends UIComponent {
     private String text;
     private Color color;
+    private boolean shadow;
     private boolean needsSizeCalculated = true;
 
     public TextComponent(String text, Color color) {
         this.text = text;
         this.color = color;
+        this.shadow = true;
 
         if (Minecraft.getInstance().font != null) {
             calculateSize();
             needsSizeCalculated = false;
         }
+    }
+
+    public TextComponent(String text, Color color, boolean shadow) {
+        this(text, color);
+        this.shadow = shadow;
     }
 
     public String getText() {
@@ -38,6 +46,8 @@ public class TextComponent extends UIComponent {
         this.color = color;
     }
 
+    public void shadow(boolean shadow) { this.shadow = shadow; }
+
     @Override
     protected void renderComponent(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (needsSizeCalculated) {
@@ -46,7 +56,12 @@ public class TextComponent extends UIComponent {
             needsSizeCalculated = false;
         }
 
-        GuiComponent.drawString(poseStack, Minecraft.getInstance().font, text, getX(), getY(), color.getRGB());
+        Font font = Minecraft.getInstance().font;
+
+        if (shadow)
+            GuiComponent.drawString(poseStack, font, text, getX(), getY(), color.getRGB());
+        else
+            Minecraft.getInstance().font.draw(poseStack, text, getX(), getY(), color.getRGB());
     }
 
     private void calculateSize() {
