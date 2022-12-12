@@ -1,6 +1,7 @@
 package team.lodestar.sage.client.gui.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import team.lodestar.sage.client.gui.PositionInfo;
 import team.lodestar.sage.client.gui.events.OnComponentClick;
 
@@ -149,6 +150,16 @@ public abstract class UIComponent {
 
     public int getHeight() {
         return positionInfo.height;
+    }
+
+    public double mouseX() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.mouseHandler.xpos() * (double)mc.getWindow().getGuiScaledWidth() / mc.getWindow().getScreenWidth();
+    }
+
+    public double mouseY() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / mc.getWindow().getScreenHeight();
     }
 
     // NOTE: if for some reason you are dynamically changing the positions of a component,
