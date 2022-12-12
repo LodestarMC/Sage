@@ -10,7 +10,7 @@ public class VerticalComponent extends UIComponent {
     @Override
     public UIComponent withChild(UIComponent component) {
         for (int i = 0; i < children.size(); i++)
-            component.positionInfo.y += spacing + children.get(i).positionInfo.height;
+            component.positionInfo.y += spacing + children.get(i).positionInfo.height + children.get(i).positionInfo.paddingY;
 
         return super.withChild(component);
     }
