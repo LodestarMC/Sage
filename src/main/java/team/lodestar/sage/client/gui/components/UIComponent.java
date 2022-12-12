@@ -2,6 +2,7 @@ package team.lodestar.sage.client.gui.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import team.lodestar.sage.client.gui.PositionInfo;
+import team.lodestar.sage.client.gui.events.OnComponentClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public abstract class UIComponent {
     protected PositionInfo positionInfo = new PositionInfo();
     protected List<UIComponent> children = new ArrayList<>();
     protected UIComponent parent; // can be null, if this is the root parent
-    protected Consumer<UIComponent> onClick;
+    protected OnComponentClick onClick;
     protected Consumer<UIComponent> onHover;
 
     private int cachedX;
@@ -67,22 +68,22 @@ public abstract class UIComponent {
     }
 
     public UIComponent paddingLeft(int x) {
-        positionInfo.paddingX = x;
+        positionInfo.paddingX += x;
         return this;
     }
 
     public UIComponent paddingRight(int x) {
-        positionInfo.paddingX = -x;
+        positionInfo.paddingX -= x;
         return this;
     }
 
     public UIComponent paddingUp(int y) {
-        positionInfo.paddingY = y;
+        positionInfo.paddingY += y;
         return this;
     }
 
     public UIComponent paddingDown(int y) {
-        positionInfo.paddingY = -y;
+        positionInfo.paddingY -= y;
         return this;
     }
 
@@ -92,7 +93,7 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent onClick(Consumer<UIComponent> handler) {
+    public UIComponent onClick(OnComponentClick handler) {
         onClick = handler;
         return this;
     }
@@ -100,6 +101,18 @@ public abstract class UIComponent {
     public UIComponent onHover(Consumer<UIComponent> handler) {
         onHover = handler;
         return this;
+    }
+
+    public void receiveMouseRelease(double mouseX, double mouseY) {
+        if (containsPoint(mouseX, mouseY) && onClick != null)
+            onClick.onClick(this);
+
+        for (UIComponent component : children)
+            component.receiveMouseRelease(mouseX, mouseY);
+    }
+
+    private boolean containsPoint(double x, double y) {
+        return x > getX() && x < getX() + getWidth() && y > getY() && y < getY() + getHeight();
     }
 
     private int calculateX() {
@@ -128,6 +141,14 @@ public abstract class UIComponent {
 
     public int getY() {
         return cachedY;
+    }
+
+    public int getWidth() {
+        return positionInfo.width;
+    }
+
+    public int getHeight() {
+        return positionInfo.height;
     }
 
     // NOTE: if for some reason you are dynamically changing the positions of a component,

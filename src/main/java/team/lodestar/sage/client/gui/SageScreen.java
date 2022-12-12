@@ -37,7 +37,8 @@ public class SageScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        return super.mouseClicked(pMouseX, pMouseY, pButton);
+    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+        rootComponent.receiveMouseRelease(pMouseX, pMouseY);
+        return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 }

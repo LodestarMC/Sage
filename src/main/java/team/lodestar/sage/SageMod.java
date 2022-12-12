@@ -50,6 +50,10 @@ class Test {
                                                             .withChild(
                                                                     new TextComponent("More text", Color.GREEN)
                                                                             .paddingTopLeft(1))
+                                                            .onClick(c -> {
+                                                                c.paddingUp(2);
+                                                                c.recalculatePosition();
+                                                            })
                                             )
                             )
             );
