@@ -3,7 +3,7 @@ package team.lodestar.sage.client.gui.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import team.lodestar.sage.client.gui.PositionInfo;
-import team.lodestar.sage.client.gui.events.OnComponentClick;
+import team.lodestar.sage.client.gui.events.ComponentEventHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,7 @@ public abstract class UIComponent {
     protected PositionInfo positionInfo = new PositionInfo();
     protected List<UIComponent> children = new ArrayList<>();
     protected UIComponent parent; // can be null, if this is the root parent
-    protected OnComponentClick onClick;
-    protected Consumer<UIComponent> onHover;
+    protected ComponentEventHandlers eventHandlers = new ComponentEventHandlers();
 
     private int cachedX;
     private int cachedY;
@@ -94,19 +93,19 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent onClick(OnComponentClick handler) {
-        onClick = handler;
+    public UIComponent onClick(ComponentEventHandlers.OnComponentClick handler) {
+        eventHandlers.addOnClickHandler(handler);
         return this;
     }
 
-    public UIComponent onHover(Consumer<UIComponent> handler) {
-        onHover = handler;
+    public UIComponent onHover(ComponentEventHandlers.OnComponentHover handler) {
+        eventHandlers.addOnHoverHandler(handler);
         return this;
     }
 
     public void receiveMouseRelease(double mouseX, double mouseY) {
-        if (containsPoint(mouseX, mouseY) && onClick != null)
-            onClick.onClick(this);
+        if (containsPoint(mouseX, mouseY))
+            eventHandlers.invokeOnClickHandlers(this);
 
         for (UIComponent component : children)
             component.receiveMouseRelease(mouseX, mouseY);
