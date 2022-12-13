@@ -7,7 +7,6 @@ import team.lodestar.sage.client.gui.events.ComponentEventHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class UIComponent {
     protected PositionInfo positionInfo = new PositionInfo();
@@ -17,8 +16,14 @@ public abstract class UIComponent {
 
     private int cachedX;
     private int cachedY;
+    private float partialTicks;
 
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTicks) {
+        partialTicks = pPartialTicks;
+
+        if (containsPoint(pMouseX, pMouseY))
+            eventHandlers.invokeOnHoverHandlers(this);
+
         renderComponent(pPoseStack, pMouseX, pMouseY, pPartialTicks);
 
         for (UIComponent child : children)
@@ -159,6 +164,10 @@ public abstract class UIComponent {
     public double mouseY() {
         Minecraft mc = Minecraft.getInstance();
         return mc.mouseHandler.ypos() * (double)mc.getWindow().getGuiScaledHeight() / mc.getWindow().getScreenHeight();
+    }
+
+    public float partialTicks() {
+        return partialTicks;
     }
 
     // NOTE: if for some reason you are dynamically changing the positions of a component,
