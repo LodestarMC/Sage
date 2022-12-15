@@ -19,7 +19,7 @@ public class TextureComponent extends UIComponent {
     private float scaleX = 1f;
     private float scaleY = 1f;
 
-    public TextureComponent(ResourceLocation resource) {
+    private TextureComponent(ResourceLocation resource) {
         textureLocation = resource;
 
         SimpleTexture.TextureImage texture = ((SimpleTexture)Minecraft.getInstance().getTextureManager().getTexture(resource)).getTextureImage(Minecraft.getInstance().getResourceManager());
@@ -28,7 +28,6 @@ public class TextureComponent extends UIComponent {
             NativeImage nativeImage = texture.getImage();
             textureWidth = nativeImage.getWidth();
             textureHeight = nativeImage.getHeight();
-            dimensions(textureWidth, textureHeight);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,16 +37,14 @@ public class TextureComponent extends UIComponent {
         this(resource);
         scaleX = scale;
         scaleY = scale;
+        dimensions((int)(textureWidth * scaleX), (int)(textureHeight * scaleY));
     }
 
     public TextureComponent(ResourceLocation resource, float scaleX, float scaleY) {
         this(resource);
         this.scaleX = scaleX;
         this.scaleY = scaleY;
-    }
-
-    public void setTexture(ResourceLocation resource) {
-        this.textureLocation = resource;
+        dimensions((int)(textureWidth * scaleX), (int)(textureHeight * scaleY));
     }
 
     public ResourceLocation getTextureLocation() {
