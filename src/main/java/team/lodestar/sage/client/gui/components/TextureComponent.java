@@ -16,6 +16,8 @@ public class TextureComponent extends UIComponent {
     private ResourceLocation textureLocation;
     private int textureWidth;
     private int textureHeight;
+    private float scaleX = 1f;
+    private float scaleY = 1f;
 
     public TextureComponent(ResourceLocation resource) {
         textureLocation = resource;
@@ -30,6 +32,18 @@ public class TextureComponent extends UIComponent {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public TextureComponent(ResourceLocation resource, float scale) {
+        this(resource);
+        scaleX = scale;
+        scaleY = scale;
+    }
+
+    public TextureComponent(ResourceLocation resource, float scaleX, float scaleY) {
+        this(resource);
+        this.scaleX = scaleX;
+        this.scaleY = scaleY;
     }
 
     public void setTexture(ResourceLocation resource) {
@@ -48,7 +62,7 @@ public class TextureComponent extends UIComponent {
                 .setPosTexDefaultFormat()
                 .setShaderTexture(textureLocation)
                 .setColor(1f, 1f, 1f)
-                .setPositionWithWidth(getX(), getY(), getWidth(), getHeight())
+                .setPositionWithWidth(getX(), getY(), textureWidth * scaleX, textureHeight * scaleY)
                 .draw(poseStack);
 
         poseStack.popPose();
