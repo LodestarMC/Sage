@@ -23,6 +23,8 @@ public abstract class UIComponent {
 
         if (containsPoint(pMouseX, pMouseY))
             eventHandlers.invokeOnHoverHandlers(this);
+        else
+            eventHandlers.invokeOnNotHoverHandlers(this);
 
         renderComponent(pPoseStack, pMouseX, pMouseY, pPartialTicks);
 
