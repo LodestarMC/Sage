@@ -14,8 +14,8 @@ public abstract class UIComponent {
     protected UIComponent parent; // can be null, if this is the root parent
     protected ComponentEventHandlers eventHandlers = new ComponentEventHandlers();
 
-    private int cachedX;
-    private int cachedY;
+    private float cachedX;
+    private float cachedY;
     private float partialTicks;
 
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTicks) {
@@ -42,7 +42,7 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent at(int x, int y) {
+    public UIComponent at(float x, float y) {
         positionInfo.x = x;
         positionInfo.y = y;
         positionInfo.relative = true;
@@ -50,7 +50,7 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent atDirect(int x, int y) {
+    public UIComponent atDirect(float x, float y) {
         positionInfo.x = x;
         positionInfo.y = y;
         positionInfo.relative = false;
@@ -58,43 +58,43 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent width(int width) {
+    public UIComponent width(float width) {
         positionInfo.width = width;
         return this;
     }
 
-    public UIComponent height(int height) {
+    public UIComponent height(float height) {
         positionInfo.height = height;
         return this;
     }
 
-    public UIComponent dimensions(int width, int height) {
+    public UIComponent dimensions(float width, float height) {
         positionInfo.width = width;
         positionInfo.height = height;
         return this;
     }
 
-    public UIComponent paddingLeft(int x) {
+    public UIComponent paddingLeft(float x) {
         positionInfo.paddingX += x;
         return this;
     }
 
-    public UIComponent paddingRight(int x) {
+    public UIComponent paddingRight(float x) {
         positionInfo.paddingX -= x;
         return this;
     }
 
-    public UIComponent paddingUp(int y) {
+    public UIComponent paddingUp(float y) {
         positionInfo.paddingY += y;
         return this;
     }
 
-    public UIComponent paddingDown(int y) {
+    public UIComponent paddingDown(float y) {
         positionInfo.paddingY -= y;
         return this;
     }
 
-    public UIComponent paddingTopLeft(int p) {
+    public UIComponent paddingTopLeft(float p) {
         paddingLeft(p);
         paddingUp(p);
         return this;
@@ -122,8 +122,8 @@ public abstract class UIComponent {
         return x > getX() && x < getX() + getWidth() && y > getY() && y < getY() + getHeight();
     }
 
-    private int calculateX() {
-        int x = positionInfo.x;
+    private float calculateX() {
+        float x = positionInfo.x;
 
         if (positionInfo.relative && parent != null)
             x += parent.getX() + positionInfo.paddingX;
@@ -132,8 +132,8 @@ public abstract class UIComponent {
         return x;
     }
 
-    private int calculateY() {
-        int y = positionInfo.y;
+    private float calculateY() {
+        float y = positionInfo.y;
 
         if (positionInfo.relative && parent != null)
             y += parent.getY() + positionInfo.paddingY;
@@ -142,19 +142,19 @@ public abstract class UIComponent {
         return y;
     }
 
-    public int getX() {
+    public float getX() {
         return cachedX;
     }
 
-    public int getY() {
+    public float getY() {
         return cachedY;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return positionInfo.width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return positionInfo.height;
     }
 

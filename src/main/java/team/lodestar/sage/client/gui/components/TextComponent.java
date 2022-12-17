@@ -56,10 +56,8 @@ public class TextComponent extends UIComponent {
             needsSizeCalculated = false;
         }
 
-        Font font = Minecraft.getInstance().font;
-
         if (shadow)
-            GuiComponent.drawString(poseStack, font, text, getX(), getY(), color.getRGB());
+            Minecraft.getInstance().font.drawShadow(poseStack, text, getX(), getY(), color.getRGB());
         else
             Minecraft.getInstance().font.draw(poseStack, text, getX(), getY(), color.getRGB());
     }
