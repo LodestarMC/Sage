@@ -37,14 +37,14 @@ public class TextureComponent extends UIComponent {
         this(resource);
         scaleX = scale;
         scaleY = scale;
-        dimensions((int)(textureWidth * scaleX), (int)(textureHeight * scaleY));
+        dimensions(textureWidth * scaleX, textureHeight * scaleY);
     }
 
     public TextureComponent(ResourceLocation resource, float scaleX, float scaleY) {
         this(resource);
         this.scaleX = scaleX;
         this.scaleY = scaleY;
-        dimensions((int)(textureWidth * scaleX), (int)(textureHeight * scaleY));
+        dimensions(textureWidth * scaleX, textureHeight * scaleY);
     }
 
     public ResourceLocation getTextureLocation() {
