@@ -3,16 +3,17 @@ package team.lodestar.sage.client.gui.components;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import team.lodestar.sage.client.gui.PositionInfo;
-import team.lodestar.sage.client.gui.events.ComponentEventHandlers;
+import team.lodestar.sage.client.gui.events.ComponentEventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class UIComponent {
     protected PositionInfo positionInfo = new PositionInfo();
     protected List<UIComponent> children = new ArrayList<>();
     protected UIComponent parent; // can be null, if this is the root parent
-    protected ComponentEventHandlers eventHandlers = new ComponentEventHandlers();
+    protected List<ComponentEventHandler> eventHandlers = new ArrayList<>();
 
     private float cachedX;
     private float cachedY;
@@ -22,9 +23,9 @@ public abstract class UIComponent {
         partialTicks = pPartialTicks;
 
         if (containsPoint(pMouseX, pMouseY))
-            eventHandlers.invokeOnHoverHandlers(this);
+            eventHandlers.forEach(handler -> handler.invokeOnHover());
         else
-            eventHandlers.invokeOnNotHoverHandlers(this);
+            eventHandlers.forEach(handler -> handler.invokeOnNotHover());
 
         renderComponent(pPoseStack, pMouseX, pMouseY, pPartialTicks);
 
@@ -100,19 +101,30 @@ public abstract class UIComponent {
         return this;
     }
 
-    public UIComponent onClick(ComponentEventHandlers.OnComponentClick handler) {
-        eventHandlers.addOnClickHandler(handler);
+    public UIComponent onClick(Consumer<UIComponent> handler) {
+        eventHandlers.add(new ComponentEventHandler().setComponent(this).onClick(handler));
         return this;
     }
 
-    public UIComponent onHover(ComponentEventHandlers.OnComponentHover handler) {
-        eventHandlers.addOnHoverHandler(handler);
+    public UIComponent onHover(Consumer<UIComponent> handler) {
+        eventHandlers.add(new ComponentEventHandler().setComponent(this).onHover(handler));
+        return this;
+    }
+
+    public UIComponent onNotHover(Consumer<UIComponent> handler) {
+        eventHandlers.add(new ComponentEventHandler().setComponent(this).onNotHover(handler));
+        return this;
+    }
+
+    public UIComponent addHandler(ComponentEventHandler handler) {
+        handler.setComponent(this);
+        eventHandlers.add(handler);
         return this;
     }
 
     public void receiveMouseRelease(double mouseX, double mouseY) {
         if (containsPoint(mouseX, mouseY))
-            eventHandlers.invokeOnClickHandlers(this);
+            eventHandlers.forEach(handler -> handler.invokeOnClick());
 
         for (UIComponent component : children)
             component.receiveMouseRelease(mouseX, mouseY);
