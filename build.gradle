@@ -138,7 +138,7 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url = uri("file://${System.getenv("local_maven")}")
         }
     }
 }
