@@ -28,6 +28,7 @@ public class SageScreen extends Screen {
             rootComponent.recalculatePosition();
         }
 
+        rootComponent.recalculatePosition();
         Minecraft.getInstance().setScreen(this);
     }
 
