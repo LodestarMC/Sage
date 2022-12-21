@@ -4,15 +4,18 @@ import net.minecraft.client.Minecraft;
 import team.lodestar.sage.client.gui.components.UIComponent;
 import team.lodestar.sage.client.gui.events.ComponentEventHandler;
 
-public class WidenOnHoverEffect extends ComponentEventHandler {
+public class StretchOnHoverEffect extends ComponentEventHandler {
     private float originalWidth;
-    private float targetWidth;
+    private float originalHeight;
+    private float deltaWidth;
+    private float deltaHeight;
     private float speed;
     private float t = 0;
     private EasingFunc easingFunction;
 
-    public WidenOnHoverEffect(float targetWidth, float speed, EasingFunc easingFunction) {
-        this.targetWidth = targetWidth;
+    public StretchOnHoverEffect(float deltaWidth, float deltaHeight, float speed, EasingFunc easingFunction) {
+        this.deltaWidth = deltaWidth;
+        this.deltaHeight = deltaHeight;
         this.speed = speed;
         this.easingFunction = easingFunction;
 
@@ -24,6 +27,9 @@ public class WidenOnHoverEffect extends ComponentEventHandler {
     public void init() {
         if (originalWidth == 0)
             originalWidth = component.getWidth();
+
+        if (originalHeight == 0)
+            originalHeight = component.getHeight();
     }
 
     public void onHover(UIComponent component) {
@@ -31,8 +37,9 @@ public class WidenOnHoverEffect extends ComponentEventHandler {
         if (t > 1)
             t = 1;
 
-        float width = easingFunction.apply(originalWidth, targetWidth, t);
-        component.width(width);
+        float width = easingFunction.apply(0, deltaWidth, t);
+        float height = easingFunction.apply(0, deltaHeight, t);
+        component.dimensions(originalWidth + width, originalHeight + height);
     }
 
     public void onNotHover(UIComponent component) {
@@ -40,7 +47,8 @@ public class WidenOnHoverEffect extends ComponentEventHandler {
         if (t < 0)
             t = 0;
 
-        float width = easingFunction.apply(originalWidth, targetWidth, t);
-        component.width(width);
+        float width = easingFunction.apply(0, deltaWidth, t);
+        float height = easingFunction.apply(0, deltaHeight, t);
+        component.dimensions(originalWidth + width, originalHeight + height);
     }
 }
