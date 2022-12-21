@@ -13,8 +13,9 @@ import org.slf4j.Logger;
 import team.lodestar.sage.client.gui.SageScreen;
 import team.lodestar.sage.client.gui.components.*;
 import team.lodestar.sage.client.gui.components.TextComponent;
+import team.lodestar.sage.client.gui.effect.ChangePosOnHoverEffect;
 import team.lodestar.sage.client.gui.effect.Easings;
-import team.lodestar.sage.client.gui.effect.WidenOnHoverEffect;
+import team.lodestar.sage.client.gui.effect.StretchOnHoverEffect;
 
 import java.awt.*;
 
@@ -62,34 +63,33 @@ class Test {
         return new PanelComponent(73, 17, new Color(34, 34, 34))
                 .withChild(new HorizontalComponent(4)
                         .paddingTopLeft(2)
-                        .withChild(new TextureComponent(texture, scale))
-                        .withChild(new TextComponent(text, Color.WHITE, false)
-                                .paddingUp(2)
-                                .onHover(component -> {
-                                    TextComponent textComponent = (TextComponent) component;
-                                    textComponent.color = new Color(
-                                            Math.max(0, textComponent.color.getRed() - 20),
-                                            Math.max(0, textComponent.color.getGreen() - 20),
-                                            Math.max(0, textComponent.color.getBlue() - 20)
-                                    );
-                                })
-                                .onNotHover(component -> {
-                                    TextComponent textComponent = (TextComponent) component;
-                                    textComponent.color = new Color(
-                                            Math.min(255, textComponent.color.getRed() + 20),
-                                            Math.min(255, textComponent.color.getGreen() + 20),
-                                            Math.min(255, textComponent.color.getBlue() + 20)
-                                    );
-                                })
-                        )
+                        .withChild(new TextureComponent(texture, scale).paddingUp(1))
+                        .withChild(new TextComponent(text, Color.WHITE, false).paddingUp(2))
                 )
-                .addHandler(new WidenOnHoverEffect(77, 0.5f, Easings::easeOutQuint))
+                //.addHandler(new WidenOnHoverEffect(77, 0.5f, Easings::easeOutQuint))
+                .propagateHoverEvents()
+                .withChild(new PanelComponent(1, 0, new Color(140, 140, 140)).paddingRight(2).paddingUp(8).addHandler(new StretchOnHoverEffect(0, 17, 0.3f, Easings::easeOutQuart)).addHandler(new ChangePosOnHoverEffect(0, -8, 0.3f, Easings::easeOutQuart)))
+                .withChild(new PanelComponent(1, 0, new Color(140, 140, 140)).paddingLeft(74).paddingUp(8).addHandler(new StretchOnHoverEffect(0, 17, 0.3f, Easings::easeOutQuart)).addHandler(new ChangePosOnHoverEffect(0, -8, 0.3f, Easings::easeOutQuart)))
                 .onHover(component -> {
                     PanelComponent panelComponent = (PanelComponent) component;
                     panelComponent.fillColor = new Color(
                             Math.min(255, panelComponent.fillColor.getRed() + 20),
                             Math.min(255, panelComponent.fillColor.getGreen() + 20),
                             Math.min(255, panelComponent.fillColor.getBlue() + 20)
+                    );
+
+                    TextureComponent textureComponent = (TextureComponent) panelComponent.getChild(0).getChild(0);
+                    textureComponent.color = new Color(
+                            Math.max(0, textureComponent.color.getRed() - 20),
+                            Math.max(0, textureComponent.color.getGreen() - 20),
+                            Math.max(0, textureComponent.color.getBlue() - 20)
+                    );
+
+                    TextComponent textComponent = (TextComponent) panelComponent.getChild(0).getChild(1);
+                    textComponent.color = new Color(
+                            Math.max(0, textComponent.color.getRed() - 20),
+                            Math.max(0, textComponent.color.getGreen() - 20),
+                            Math.max(0, textComponent.color.getBlue() - 20)
                     );
                 })
                 .onNotHover(component -> {
@@ -98,6 +98,20 @@ class Test {
                             Math.max(34, panelComponent.fillColor.getRed() - 20),
                             Math.max(34, panelComponent.fillColor.getGreen() - 20),
                             Math.max(34, panelComponent.fillColor.getBlue() - 20)
+                    );
+
+                    TextureComponent textureComponent = (TextureComponent) panelComponent.getChild(0).getChild(0);
+                    textureComponent.color = new Color(
+                            Math.min(255, textureComponent.color.getRed() + 20),
+                            Math.min(255, textureComponent.color.getGreen() + 20),
+                            Math.min(255, textureComponent.color.getBlue() + 20)
+                    );
+
+                    TextComponent textComponent = (TextComponent) panelComponent.getChild(0).getChild(1);
+                    textComponent.color = new Color(
+                            Math.min(255, textComponent.color.getRed() + 20),
+                            Math.min(255, textComponent.color.getGreen() + 20),
+                            Math.min(255, textComponent.color.getBlue() + 20)
                     );
                 });
     }
