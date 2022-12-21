@@ -162,6 +162,14 @@ public abstract class UIComponent {
         return cachedY;
     }
 
+    public float getX() {
+        return positionInfo.x;
+    }
+
+    public float getY() {
+        return positionInfo.y;
+    }
+
     public float getWidth() {
         return positionInfo.width;
     }
