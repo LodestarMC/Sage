@@ -15,6 +15,7 @@ public abstract class UIComponent {
     protected UIComponent parent; // can be null, if this is the root parent
     protected List<ComponentEventHandler> eventHandlers = new ArrayList<>();
 
+    private boolean propagateHoverEvents = false;
     private float cachedX;
     private float cachedY;
     private float partialTicks;
@@ -22,7 +23,13 @@ public abstract class UIComponent {
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTicks) {
         partialTicks = pPartialTicks;
 
-        if (containsPoint(pMouseX, pMouseY))
+        if (parent != null && parent.propagateHoverEvents) {
+            if (parent.containsPoint(pMouseX, pMouseY))
+                eventHandlers.forEach(handler -> handler.invokeOnHover());
+            else
+                eventHandlers.forEach(handler -> handler.invokeOnNotHover());
+        }
+        else if (containsPoint(pMouseX, pMouseY))
             eventHandlers.forEach(handler -> handler.invokeOnHover());
         else
             eventHandlers.forEach(handler -> handler.invokeOnNotHover());
@@ -45,6 +52,11 @@ public abstract class UIComponent {
 
     public UIComponent getChild(int index) {
         return children.get(index);
+    }
+
+    public UIComponent propagateHoverEvents() {
+        propagateHoverEvents = true;
+        return this;
     }
 
     public UIComponent at(float x, float y) {
