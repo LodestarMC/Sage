@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class PanelComponent extends UIComponent {
 
-    private Color fillColor;
+    public Color fillColor;
 
     public PanelComponent(int width, int height, Color color) {
         dimensions(width, height);

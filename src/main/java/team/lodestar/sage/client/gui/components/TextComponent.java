@@ -8,7 +8,7 @@ import java.awt.*;
 // TODO: TextComponents should be dynamic by default. Instead of storing a string directly, we need a supplier
 public class TextComponent extends UIComponent {
     private String text;
-    private Color color;
+    public Color color;
     private boolean shadow;
     private boolean needsSizeCalculated = true;
 
@@ -34,14 +34,6 @@ public class TextComponent extends UIComponent {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     public void shadow(boolean shadow) { this.shadow = shadow; }
