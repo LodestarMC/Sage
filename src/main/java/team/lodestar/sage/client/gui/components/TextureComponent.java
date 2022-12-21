@@ -1,8 +1,11 @@
 package team.lodestar.sage.client.gui.components;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
@@ -22,12 +25,18 @@ public class TextureComponent extends UIComponent {
     private TextureComponent(ResourceLocation resource) {
         textureLocation = resource;
 
-        SimpleTexture.TextureImage texture = ((SimpleTexture)Minecraft.getInstance().getTextureManager().getTexture(resource)).getTextureImage(Minecraft.getInstance().getResourceManager());
-
         try {
-            NativeImage nativeImage = texture.getImage();
-            textureWidth = nativeImage.getWidth();
-            textureHeight = nativeImage.getHeight();
+            AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(resource);
+            if (texture instanceof SimpleTexture simpleTexture) {
+                NativeImage image = simpleTexture.getTextureImage(Minecraft.getInstance().getResourceManager()).getImage();
+                textureWidth = image.getWidth();
+                textureHeight = image.getHeight();
+            }
+            else if (texture instanceof DynamicTexture dynamicTexture) {
+                NativeImage image = dynamicTexture.getPixels();
+                textureWidth = image.getWidth();
+                textureHeight = image.getHeight();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,9 +2,8 @@ package team.lodestar.sage;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.GameNarrator;
-import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,9 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import team.lodestar.sage.client.gui.SageScreen;
-import team.lodestar.sage.client.gui.components.PanelComponent;
+import team.lodestar.sage.client.gui.components.*;
 import team.lodestar.sage.client.gui.components.TextComponent;
-import team.lodestar.sage.client.gui.components.VerticalComponent;
+import team.lodestar.sage.client.gui.effect.Easings;
+import team.lodestar.sage.client.gui.effect.WidenOnHoverEffect;
 
 import java.awt.*;
 
@@ -23,7 +23,7 @@ import java.awt.*;
 public class SageMod
 {
     public static final String MODID = "sage";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public SageMod()
     {
@@ -36,27 +36,71 @@ public class SageMod
 
 @Mod.EventBusSubscriber(modid = SageMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 class Test {
-    private static final SageScreen TEST_SCREEN = new SageScreen(GameNarrator.NO_TITLE)
-            .set(() ->
-                    new PanelComponent(90, 90, Color.black)
-                            .at(10, 10)
-                            .withChild(
-                                    new VerticalComponent(2)
-                                            .paddingTopLeft(3)
-                                            .withChild(new TextComponent("Hello, Sage!", Color.WHITE))
-                                            .withChild(new TextComponent("This is text", Color.YELLOW))
-                                            .withChild(
-                                                    new PanelComponent(55, 10, Color.WHITE)
-                                                            .withChild(
-                                                                    new TextComponent("More text", Color.GREEN)
-                                                                            .paddingTopLeft(1))
-                                                            .onClick(c -> {
-                                                                c.paddingUp(2);
-                                                                c.recalculatePosition();
-                                                            })
-                                            )
-                            )
-            );
+    private static SageScreen TEST_SCREEN = new SageScreen(GameNarrator.NO_TITLE).centered()
+            .set(Test::setup);
+
+    private static UIComponent setup() {
+        return new PanelComponent(472, 246, Color.BLACK)
+                .at(4, 4)
+                .withChild(new HorizontalComponent(4)
+                        .paddingTopLeft(4)
+                        .withChild(clickPanel("Databank", new ResourceLocation("sage", "textures/gui/chest.png"), 0.145f))
+                        .withChild(clickPanel("Research", new ResourceLocation("sage", "textures/gui/potion.png"), 0.145f))
+                        .withChild(clickPanel("Event Log", new ResourceLocation("sage", "textures/gui/chat_bubble.png"), 0.145f))
+                )
+                .withChild(new PanelComponent(472, 2, new Color(133, 133, 133)).at(0, 25))
+                .withChild(new PanelComponent(2, 221, new Color(133, 133, 133)).at(81, 25))
+                .withChild(new VerticalComponent(3)
+                        .at(4, 32)
+                        .withChild(clickPanel("Data Types", new ResourceLocation("sage", "textures/gui/bar_chart.png"), 0.15f))
+                        .withChild(clickPanel("Data Tree", new ResourceLocation("sage", "textures/gui/data_tree.png"), 0.15f))
+                        .withChild(clickPanel("third thing", new ResourceLocation("sage", "textures/gui/data_tree.png"), 0.15f))
+                );
+    }
+
+    private static UIComponent clickPanel(String text, ResourceLocation texture, float scale) {
+        return new PanelComponent(73, 17, new Color(34, 34, 34))
+                .withChild(new HorizontalComponent(4)
+                        .paddingTopLeft(2)
+                        .withChild(new TextureComponent(texture, scale))
+                        .withChild(new TextComponent(text, Color.WHITE, false)
+                                .paddingUp(2)
+                                .onHover(component -> {
+                                    TextComponent textComponent = (TextComponent) component;
+                                    textComponent.color = new Color(
+                                            Math.max(0, textComponent.color.getRed() - 20),
+                                            Math.max(0, textComponent.color.getGreen() - 20),
+                                            Math.max(0, textComponent.color.getBlue() - 20)
+                                    );
+                                })
+                                .onNotHover(component -> {
+                                    TextComponent textComponent = (TextComponent) component;
+                                    textComponent.color = new Color(
+                                            Math.min(255, textComponent.color.getRed() + 20),
+                                            Math.min(255, textComponent.color.getGreen() + 20),
+                                            Math.min(255, textComponent.color.getBlue() + 20)
+                                    );
+                                })
+                        )
+                )
+                .addHandler(new WidenOnHoverEffect(77, 0.5f, Easings::easeOutQuint))
+                .onHover(component -> {
+                    PanelComponent panelComponent = (PanelComponent) component;
+                    panelComponent.fillColor = new Color(
+                            Math.min(255, panelComponent.fillColor.getRed() + 20),
+                            Math.min(255, panelComponent.fillColor.getGreen() + 20),
+                            Math.min(255, panelComponent.fillColor.getBlue() + 20)
+                    );
+                })
+                .onNotHover(component -> {
+                    PanelComponent panelComponent = (PanelComponent) component;
+                    panelComponent.fillColor = new Color(
+                            Math.max(34, panelComponent.fillColor.getRed() - 20),
+                            Math.max(34, panelComponent.fillColor.getGreen() - 20),
+                            Math.max(34, panelComponent.fillColor.getBlue() - 20)
+                    );
+                });
+    }
 
     @SubscribeEvent
     public static void onRightClickEmpty(PlayerInteractEvent.RightClickEmpty event) {
