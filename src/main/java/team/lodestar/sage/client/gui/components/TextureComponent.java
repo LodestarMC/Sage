@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -65,9 +66,10 @@ public class TextureComponent extends UIComponent {
         poseStack.pushPose();
 
         VFXBuilders.createScreen()
-                .setPosTexDefaultFormat()
+                .setPosColorTexDefaultFormat()
+                .setShader(GameRenderer::getPositionColorTexShader)
                 .setShaderTexture(textureLocation)
-                .setColor(1f, 1f, 1f)
+                .setColor(255, 255, 255)
                 .setPositionWithWidth(getAbsoluteX(), getAbsoluteY(), textureWidth * scaleX, textureHeight * scaleY)
                 .draw(poseStack);
 
