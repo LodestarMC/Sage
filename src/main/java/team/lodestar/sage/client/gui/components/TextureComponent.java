@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
+import team.lodestar.sage.SageMod;
 
 // TODO: A lot of stuff, actually.
 // - Make user able to specify blit parameters. Useful when the texture is an atlas
@@ -37,6 +38,7 @@ public class TextureComponent extends UIComponent {
                 NativeImage image = dynamicTexture.getPixels();
                 textureWidth = image.getWidth();
                 textureHeight = image.getHeight();
+                SageMod.LOGGER.warn("DynamicTexture may not work yet");
             }
         } catch (Exception e) {
             e.printStackTrace();
