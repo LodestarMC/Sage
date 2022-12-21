@@ -13,6 +13,7 @@ public class SageScreen extends Screen {
     private Supplier<UIComponent> componentSupplier; // Only called once, to set rootComponent
     private UIComponent rootComponent;
     private double lastGuiScale;
+    private boolean centered;
 
     public SageScreen(Component pTitle) {
         super(pTitle);
@@ -23,6 +24,11 @@ public class SageScreen extends Screen {
         return this;
     }
 
+    public SageScreen centered() {
+        centered = true;
+        return this;
+    }
+
     public void show() {
         if (componentSupplier != null && rootComponent == null) {
             rootComponent = componentSupplier.get();
@@ -30,12 +36,24 @@ public class SageScreen extends Screen {
         }
 
         double guiScale = Minecraft.getInstance().getWindow().getGuiScale();
-        if (lastGuiScale != guiScale)
+        if (lastGuiScale != guiScale) {
+            if (centered)
+                centerRootComponent();
+
             rootComponent.receiveGuiScaleChange();
+        }
 
         lastGuiScale = guiScale;
 
         Minecraft.getInstance().setScreen(this);
+    }
+
+    private void centerRootComponent() {
+        int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+
+        rootComponent.at((screenWidth - rootComponent.getWidth()) / 2, (screenHeight - rootComponent.getHeight()) / 2);
+        rootComponent.recalculatePosition();
     }
 
     @Override
