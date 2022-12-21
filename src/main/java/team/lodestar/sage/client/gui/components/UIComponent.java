@@ -43,6 +43,10 @@ public abstract class UIComponent {
         return this;
     }
 
+    public UIComponent getChild(int index) {
+        return children.get(index);
+    }
+
     public UIComponent at(float x, float y) {
         positionInfo.x = x;
         positionInfo.y = y;
