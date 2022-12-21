@@ -20,8 +20,8 @@ public class PanelComponent extends UIComponent {
     protected void renderComponent(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         poseStack.pushPose();
 
-        float x = getX();
-        float y = getY();
+        float x = getAbsoluteX();
+        float y = getAbsoluteY();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();

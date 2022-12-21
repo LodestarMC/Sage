@@ -2,8 +2,6 @@ package team.lodestar.sage.client.gui.components;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
 
 import java.awt.*;
 
@@ -57,9 +55,9 @@ public class TextComponent extends UIComponent {
         }
 
         if (shadow)
-            Minecraft.getInstance().font.drawShadow(poseStack, text, getX(), getY(), color.getRGB());
+            Minecraft.getInstance().font.drawShadow(poseStack, text, getAbsoluteX(), getAbsoluteY(), color.getRGB());
         else
-            Minecraft.getInstance().font.draw(poseStack, text, getX(), getY(), color.getRGB());
+            Minecraft.getInstance().font.draw(poseStack, text, getAbsoluteX(), getAbsoluteY(), color.getRGB());
     }
 
     private void calculateSize() {

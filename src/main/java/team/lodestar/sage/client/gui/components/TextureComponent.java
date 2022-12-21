@@ -59,7 +59,7 @@ public class TextureComponent extends UIComponent {
                 .setPosTexDefaultFormat()
                 .setShaderTexture(textureLocation)
                 .setColor(1f, 1f, 1f)
-                .setPositionWithWidth(getX(), getY(), textureWidth * scaleX, textureHeight * scaleY)
+                .setPositionWithWidth(getAbsoluteX(), getAbsoluteY(), textureWidth * scaleX, textureHeight * scaleY)
                 .draw(poseStack);
 
         poseStack.popPose();

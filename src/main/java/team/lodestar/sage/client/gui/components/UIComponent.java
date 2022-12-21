@@ -131,14 +131,14 @@ public abstract class UIComponent {
     }
 
     private boolean containsPoint(double x, double y) {
-        return x > getX() && x < getX() + getWidth() && y > getY() && y < getY() + getHeight();
+        return x > getAbsoluteX() && x < getAbsoluteX() + getWidth() && y > getAbsoluteY() && y < getAbsoluteY() + getHeight();
     }
 
     private float calculateX() {
         float x = positionInfo.x;
 
         if (positionInfo.relative && parent != null)
-            x += parent.getX() + positionInfo.paddingX;
+            x += parent.getAbsoluteX() + positionInfo.paddingX;
 
         cachedX = x;
         return x;
@@ -148,17 +148,17 @@ public abstract class UIComponent {
         float y = positionInfo.y;
 
         if (positionInfo.relative && parent != null)
-            y += parent.getY() + positionInfo.paddingY;
+            y += parent.getAbsoluteY() + positionInfo.paddingY;
 
         cachedY = y;
         return y;
     }
 
-    public float getX() {
+    public float getAbsoluteX() {
         return cachedX;
     }
 
-    public float getY() {
+    public float getAbsoluteY() {
         return cachedY;
     }
 
