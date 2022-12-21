@@ -17,7 +17,7 @@ plugins {
 
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0'
+version = '0.1'
 group = 'team.lodestar.sage' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'sage'
 
@@ -117,7 +117,7 @@ jar {
                 "Specification-Vendor"    : "lodestar",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Version"  : "${version}",
                 "Implementation-Vendor"   : "lodestar",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
