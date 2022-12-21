@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: "${project.forgegradleVersion}", changing: false
         classpath "org.spongepowered:mixingradle:${project.mixingradleVersion}"
-        classpath "org.parchmentmc:librarian:${librarianVersion}"
+        classpath "org.parchmentmc:librarian:${project.librarianVersion}"
     }
 }
 
