@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import team.lodestar.lodestone.systems.rendering.VFXBuilders;
 import team.lodestar.sage.SageMod;
 
+import java.awt.*;
+
 // TODO: A lot of stuff, actually.
 // - Make user able to specify blit parameters. Useful when the texture is an atlas
 // - Make this work with animated textures?
@@ -23,6 +25,7 @@ public class TextureComponent extends UIComponent {
     private int textureHeight;
     private float scaleX = 1f;
     private float scaleY = 1f;
+    public Color color = Color.WHITE;
 
     private TextureComponent(ResourceLocation resource) {
         textureLocation = resource;
@@ -71,7 +74,7 @@ public class TextureComponent extends UIComponent {
                 .setPosColorTexDefaultFormat()
                 .setShader(GameRenderer::getPositionColorTexShader)
                 .setShaderTexture(textureLocation)
-                .setColor(255, 255, 255)
+                .setColor(color)
                 .setPositionWithWidth(getAbsoluteX(), getAbsoluteY(), textureWidth * scaleX, textureHeight * scaleY)
                 .draw(poseStack);
 
