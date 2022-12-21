@@ -116,6 +116,11 @@ public abstract class UIComponent {
         return this;
     }
 
+    public UIComponent onGuiScaleChange(Consumer<UIComponent> handler) {
+        eventHandlers.add(new ComponentEventHandler().setComponent(this).onGuiScaleChange(handler));
+        return this;
+    }
+
     public UIComponent addHandler(ComponentEventHandler handler) {
         handler.setComponent(this);
         eventHandlers.add(handler);
@@ -128,6 +133,13 @@ public abstract class UIComponent {
 
         for (UIComponent component : children)
             component.receiveMouseRelease(mouseX, mouseY);
+    }
+
+    public void receiveGuiScaleChange() {
+        eventHandlers.forEach(handler -> handler.invokeOnGuiScaleChange());
+
+        for (UIComponent component : children)
+            component.receiveGuiScaleChange();
     }
 
     private boolean containsPoint(double x, double y) {

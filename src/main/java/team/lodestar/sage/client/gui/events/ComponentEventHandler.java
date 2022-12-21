@@ -9,6 +9,7 @@ public class ComponentEventHandler {
     protected Consumer<UIComponent> onClick;
     protected Consumer<UIComponent> onHover;
     protected Consumer<UIComponent> onNotHover;
+    protected Consumer<UIComponent> onGuiScaleChange;
     private boolean initialized = false;
 
     private void initialize() {
@@ -43,6 +44,11 @@ public class ComponentEventHandler {
         return this;
     }
 
+    public ComponentEventHandler onGuiScaleChange(Consumer<UIComponent> onGuiScaleChange) {
+        this.onGuiScaleChange = onGuiScaleChange;
+        return this;
+    }
+
     public void invokeOnClick() {
         if (onClick != null)
             onClick.accept(component);
@@ -56,5 +62,10 @@ public class ComponentEventHandler {
     public void invokeOnNotHover() {
         if (onNotHover != null)
             onNotHover.accept(component);
+    }
+
+    public void invokeOnGuiScaleChange() {
+        if (onGuiScaleChange != null)
+            onGuiScaleChange.accept(component);
     }
 }

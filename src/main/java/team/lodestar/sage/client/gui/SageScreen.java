@@ -30,9 +30,8 @@ public class SageScreen extends Screen {
         }
 
         double guiScale = Minecraft.getInstance().getWindow().getGuiScale();
-        if (lastGuiScale != guiScale) {
-            updateRootComponentPosition();
-        }
+        if (lastGuiScale != guiScale)
+            rootComponent.receiveGuiScaleChange();
 
         lastGuiScale = guiScale;
 
@@ -48,8 +47,5 @@ public class SageScreen extends Screen {
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         rootComponent.receiveMouseRelease(pMouseX, pMouseY);
         return super.mouseReleased(pMouseX, pMouseY, pButton);
-    }
-
-    private void updateRootComponentPosition() {
     }
 }
