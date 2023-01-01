@@ -1,5 +1,6 @@
 package team.lodestar.sage.client.gui;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,7 +13,8 @@ public class SageScreen extends Screen {
 
     private Supplier<UIComponent> componentSupplier; // Only called once, to set rootComponent
     private UIComponent rootComponent;
-    private double lastGuiScale;
+    private int lastScreenWidth;
+    private int lastScreenHeight;
     private boolean centered;
 
     public SageScreen(Component pTitle) {
@@ -30,22 +32,26 @@ public class SageScreen extends Screen {
     }
 
     public void show() {
-        if (componentSupplier != null && rootComponent == null) {
-            rootComponent = componentSupplier.get();
-            rootComponent.recalculatePosition();
-        }
-
-        double guiScale = Minecraft.getInstance().getWindow().getGuiScale();
-        if (lastGuiScale != guiScale) {
-            if (centered)
-                centerRootComponent();
-
-            rootComponent.receiveGuiScaleChange();
-        }
-
-        lastGuiScale = guiScale;
-
-        Minecraft.getInstance().setScreen(this);
+//        if (componentSupplier != null && rootComponent == null) {
+//            rootComponent = componentSupplier.get();
+//            rootComponent.recalculatePosition();
+//        }
+//
+//        Window window = Minecraft.getInstance().getWindow();
+//        int screenWidth = window.getGuiScaledWidth();
+//        int screenHeight = window.getGuiScaledHeight();
+//
+//        if (screenWidth != lastScreenWidth || screenHeight != lastScreenHeight) {
+//            if (centered)
+//                centerRootComponent();
+//
+//            rootComponent.receiveGuiScaleChange();
+//        }
+//
+//        lastScreenWidth = screenWidth;
+//        lastScreenHeight = screenHeight;
+//
+//        Minecraft.getInstance().setScreen(this);
     }
 
     private void centerRootComponent() {
