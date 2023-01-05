@@ -7,24 +7,16 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.function.Supplier;
 
-public class Packet {
-    public Packet(FriendlyByteBuf buf) {
-        decode(buf);
-    }
+public abstract class Packet {
+    public abstract void encode(FriendlyByteBuf buf);
 
-    public Packet() {
+    public abstract Packet decode(FriendlyByteBuf buf);
 
-    }
+    public abstract void handle(NetworkEvent.Context context);
 
-    public void encode(FriendlyByteBuf buf) { }
-
-    public Packet decode(FriendlyByteBuf buf) { return null; }
-
-    public void handle(Supplier<NetworkEvent.Context> context) {
+    private void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> handle(context.get()));
     }
-
-    public void handle(NetworkEvent.Context context) { }
 
     public boolean isClientRecipient(NetworkEvent.Context context) {
         return context.getDirection().getReceptionSide().isClient();
@@ -35,6 +27,9 @@ public class Packet {
     }
 
     public static <T extends Packet> void register(Class<T> packetClass, SimpleChannel instance, int index) {
+        if (packetClass == null || packetClass == Packet.class)
+            throw new IllegalArgumentException("Packet class cannot be null or Packet.class");
+
         T packet = UnsafeHacks.newInstance(packetClass); // this is all your fault, sammy
         instance.registerMessage(index, packetClass, Packet::encode, buf -> (T) packet.decode(buf), Packet::handle);
     }
