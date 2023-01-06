@@ -16,6 +16,7 @@ import java.util.List;
 public class Notification implements INBTSerializable<CompoundTag> {
     private Vec3 position;
     private List<NotificationBehavior> behaviors = new ArrayList<>();
+    private boolean needsSaving = false;
 
     private Notification() { }
 
@@ -30,6 +31,14 @@ public class Notification implements INBTSerializable<CompoundTag> {
     public Notification withBehavior(NotificationBehavior behavior) {
         behaviors.add(behavior);
         return this;
+    }
+
+    public boolean needsSaving() {
+        return needsSaving;
+    }
+
+    public void setNeedsSaving(boolean needsSaving) {
+        this.needsSaving = needsSaving;
     }
 
     public Vec3 getPosition() {
@@ -59,9 +68,6 @@ public class Notification implements INBTSerializable<CompoundTag> {
         ListTag behaviorList = new ListTag();
 
         for (NotificationBehavior behavior : behaviors) {
-            if (!behavior.needsSaving())
-                continue;
-
             CompoundTag behaviorTag = new CompoundTag();
             tag.putString("name", NotificationManager.NOTIFICATION_BEHAVIORS_REGISTRY.get().getKey(behavior).toString());
             tag.put("data", behavior.serializeNbt());

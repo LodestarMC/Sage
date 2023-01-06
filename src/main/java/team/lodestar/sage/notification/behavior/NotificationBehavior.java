@@ -13,8 +13,6 @@ public class NotificationBehavior {
 
     public boolean shouldNotificationDisappear() { return false; }
 
-    public boolean needsSaving() { return false;}
-
     public void tick(Level level) { }
 
     public CompoundTag serializeNbt() {
