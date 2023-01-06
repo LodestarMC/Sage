@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.INBTSerializable;
 import team.lodestar.sage.notification.behavior.NotificationBehavior;
@@ -37,6 +38,10 @@ public class Notification implements INBTSerializable<CompoundTag> {
 
     public List<NotificationBehavior> getBehaviors() {
         return behaviors;
+    }
+
+    public void tick(Level level) {
+        behaviors.forEach(behavior -> behavior.tick(level));
     }
 
     @Override

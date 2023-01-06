@@ -3,6 +3,7 @@ package team.lodestar.sage.notification;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -42,6 +43,23 @@ public class NotificationManager {
         chunk.getCapability(SageLevelChunkCapability.CAPABILITY).ifPresent(capability -> {
             capability.CHUNK_NOTIFICATIONS.add(notification);
             chunk.setUnsaved(true);
+        });
+    }
+
+    public static void tick(Level level) {
+        if (!(level instanceof ServerLevel serverLevel))
+            return;
+
+        serverLevel.getChunkSource().chunkMap.getChunks().forEach(holder -> {
+            LevelChunk chunk = holder.getTickingChunk();
+            if (chunk == null)
+                return;
+
+            chunk.getCapability(SageLevelChunkCapability.CAPABILITY).ifPresent(capability -> {
+                capability.CHUNK_NOTIFICATIONS.forEach(notification -> {
+                    notification.tick(level);
+                });
+            });
         });
     }
 }
