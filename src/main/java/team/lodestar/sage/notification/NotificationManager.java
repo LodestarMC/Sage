@@ -1,30 +1,23 @@
 package team.lodestar.sage.notification;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import team.lodestar.sage.SageMod;
 import team.lodestar.sage.capability.SageLevelChunkCapability;
 import team.lodestar.sage.network.PacketHandler;
 import team.lodestar.sage.network.packet.SpawnNotificationPacket;
-import team.lodestar.sage.notification.behavior.NotificationBehavior;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Set;
 
 public class NotificationManager {
-    public static final ResourceKey<Registry<NotificationBehavior>> NOTIFICATION_BEHAVIORS_KEY = ResourceKey.createRegistryKey(SageMod.in("notification_behaviors"));
-    public static final DeferredRegister<NotificationBehavior> NOTIFICATION_BEHAVIORS = DeferredRegister.create(NOTIFICATION_BEHAVIORS_KEY, SageMod.MODID);
-    public static final Supplier<IForgeRegistry<NotificationBehavior>> NOTIFICATION_BEHAVIORS_REGISTRY = NOTIFICATION_BEHAVIORS.makeRegistry(() -> new RegistryBuilder<NotificationBehavior>().setMaxID(Integer.MAX_VALUE - 1).disableSaving().disableSync());
+    private static final Set<Vec3> QUEUED_DELETE_NOTIFICATIONS = new HashSet<>(); // Only used client-side
 
     public static void addNotification(Level level, Notification notification, List<ServerPlayer> targets) {
         if (level.isClientSide)
@@ -46,6 +39,10 @@ public class NotificationManager {
         });
     }
 
+    public static void removeNotificationAt(Level level, Vec3 notifPos) {
+        //if (level.isClientSide)
+    }
+
     public static void tick(Level level) {
         if (!(level instanceof ServerLevel serverLevel))
             return;
@@ -56,9 +53,13 @@ public class NotificationManager {
                 return;
 
             chunk.getCapability(SageLevelChunkCapability.CAPABILITY).ifPresent(capability -> {
-                capability.CHUNK_NOTIFICATIONS.forEach(notification -> {
+                for (Iterator<Notification> i = capability.CHUNK_NOTIFICATIONS.iterator(); i.hasNext();) {
+                    Notification notification = i.next();
                     notification.tick(level);
-                });
+
+                    if (notification.shouldDisappear())
+                        i.remove(); // TODO: sync
+                }
             });
         });
     }

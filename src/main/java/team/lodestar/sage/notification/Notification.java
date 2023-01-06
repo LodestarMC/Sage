@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.INBTSerializable;
 import team.lodestar.sage.notification.behavior.NotificationBehavior;
+import team.lodestar.sage.notification.behavior.NotificationBehaviorRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,10 @@ public class Notification implements INBTSerializable<CompoundTag> {
         behaviors.forEach(behavior -> behavior.tick(this, level));
     }
 
+    public boolean shouldDisappear() {
+        return behaviors.stream().anyMatch(NotificationBehavior::shouldNotificationDisappear);
+    }
+
     @Override
     public int hashCode() {
         return position.hashCode();
@@ -69,8 +74,8 @@ public class Notification implements INBTSerializable<CompoundTag> {
 
         for (NotificationBehavior behavior : behaviors) {
             CompoundTag behaviorTag = new CompoundTag();
-            tag.putString("name", NotificationManager.NOTIFICATION_BEHAVIORS_REGISTRY.get().getKey(behavior).toString());
-            tag.put("data", behavior.serializeNbt());
+            behaviorTag.putString("name", NotificationBehaviorRegistry.NOTIFICATION_BEHAVIORS_REGISTRY.get().getKey(behavior.getType()).toString());
+            behaviorTag.put("data", behavior.serializeNbt());
             behaviorList.add(behaviorTag);
         }
 
@@ -89,7 +94,7 @@ public class Notification implements INBTSerializable<CompoundTag> {
             CompoundTag behaviorTag = (CompoundTag) tag;
             String name = behaviorTag.getString("name");
             CompoundTag data = behaviorTag.getCompound("data");
-            NotificationBehavior behavior = NotificationManager.NOTIFICATION_BEHAVIORS_REGISTRY.get().getValue(new ResourceLocation(name)).deserializeNbt(data);
+            NotificationBehavior behavior = NotificationBehaviorRegistry.NOTIFICATION_BEHAVIORS_REGISTRY.get().getValue(new ResourceLocation(name)).getInstance().deserializeNbt(data);
             behaviors.add(behavior);
         }
     }

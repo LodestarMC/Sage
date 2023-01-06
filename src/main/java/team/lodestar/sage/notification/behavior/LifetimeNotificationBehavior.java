@@ -13,6 +13,7 @@ public class LifetimeNotificationBehavior extends NotificationBehavior {
     }
 
     public LifetimeNotificationBehavior(int timeLeft) {
+        super(NotificationBehaviorRegistry.LIFETIME_BEHAVIOR.get());
         this.ticksLeft = timeLeft;
     }
 
