@@ -77,8 +77,9 @@ public class NotificationRenderer {
         poseStack.pushPose();
         poseStack.translate(notifPos.x, notifPos.y, notifPos.z);
         poseStack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
-        //poseStack.mulPose(camera.rotation());
-        poseStack.mulPose(Vector3f.YP.rotationDegrees((Minecraft.getInstance().level.getGameTime() + partialTicks) * 2));
+        poseStack.mulPose(camera.rotation());
+        poseStack.mulPose(Vector3f.YP.rotationDegrees(180));
+        //poseStack.mulPose(Vector3f.YP.rotationDegrees((Minecraft.getInstance().level.getGameTime() + partialTicks) * 2));
 
         VertexConsumer consumer = RenderHandler.DELAYED_RENDER.getBuffer(RENDER_TYPE);
         VFXBuilders.createWorld()
