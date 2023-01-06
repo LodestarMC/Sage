@@ -50,7 +50,7 @@ public class Notification implements INBTSerializable<CompoundTag> {
     }
 
     public void tick(Level level) {
-        behaviors.forEach(behavior -> behavior.tick(level));
+        behaviors.forEach(behavior -> behavior.tick(this, level));
     }
 
     @Override
