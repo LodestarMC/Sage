@@ -12,13 +12,12 @@ public class LifetimeNotificationBehavior extends NotificationBehavior {
         return ticksLeft <= 0;
     }
 
-    public LifetimeNotificationBehavior(Notification notification, int timeLeft) {
-        super(notification);
+    public LifetimeNotificationBehavior(int timeLeft) {
         this.ticksLeft = timeLeft;
     }
 
     @Override
-    public void tick(Level level) {
+    public void tick(Notification notification, Level level) {
         ticksLeft--;
     }
 
@@ -31,6 +30,6 @@ public class LifetimeNotificationBehavior extends NotificationBehavior {
 
     @Override
     public NotificationBehavior deserializeNbt(CompoundTag nbt) {
-        return new LifetimeNotificationBehavior(notification, nbt.getInt("ticksLeft"));
+        return new LifetimeNotificationBehavior(nbt.getInt("ticksLeft"));
     }
 }

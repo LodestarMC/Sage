@@ -4,20 +4,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import team.lodestar.sage.notification.Notification;
 
-public class NotificationBehavior {
-    protected Notification notification;
+public abstract class NotificationBehavior {
+    public abstract boolean shouldNotificationDisappear();
 
-    public NotificationBehavior(Notification notification) {
-        this.notification = notification;
-    }
+    public abstract void tick(Notification notification, Level level);
 
-    public boolean shouldNotificationDisappear() { return false; }
+    public abstract CompoundTag serializeNbt();
 
-    public void tick(Level level) { }
-
-    public CompoundTag serializeNbt() {
-        return null;
-    }
-
-    public NotificationBehavior deserializeNbt(CompoundTag nbt) { return null; }
+    public abstract NotificationBehavior deserializeNbt(CompoundTag nbt);
 }
