@@ -15,15 +15,19 @@ public class SageDisplay {
     }
 
     public UIComponent getRootComponent() {
-        if (rootComponent == null) {
-            rootComponent = componentSupplier.get();
-            rootComponent.recalculatePosition();
-        }
-
+        initializeRootIfNeeded();
         return rootComponent;
     }
 
     public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+        initializeRootIfNeeded();
         rootComponent.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+    }
+
+    private void initializeRootIfNeeded() {
+        if (rootComponent == null) {
+            rootComponent = componentSupplier.get();
+            rootComponent.recalculatePosition();
+        }
     }
 }
