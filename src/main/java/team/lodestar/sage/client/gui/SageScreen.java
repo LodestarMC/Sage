@@ -11,19 +11,14 @@ import java.util.function.Supplier;
 
 public class SageScreen extends Screen {
 
-    private Supplier<UIComponent> componentSupplier; // Only called once, to set rootComponent
-    private UIComponent rootComponent;
+    private SageDisplay display;
     private int lastScreenWidth;
     private int lastScreenHeight;
     private boolean centered;
 
-    public SageScreen(Component pTitle) {
+    public SageScreen(Component pTitle, Supplier<UIComponent> componentSupplier) {
         super(pTitle);
-    }
-
-    public SageScreen set(Supplier<UIComponent> componentSupplier) {
-        this.componentSupplier = componentSupplier;
-        return this;
+        display = new SageDisplay(componentSupplier);
     }
 
     public SageScreen centered() {
@@ -32,44 +27,43 @@ public class SageScreen extends Screen {
     }
 
     public void show() {
-//        if (componentSupplier != null && rootComponent == null) {
-//            rootComponent = componentSupplier.get();
-//            rootComponent.recalculatePosition();
-//        }
-//
-//        Window window = Minecraft.getInstance().getWindow();
-//        int screenWidth = window.getGuiScaledWidth();
-//        int screenHeight = window.getGuiScaledHeight();
-//
-//        if (screenWidth != lastScreenWidth || screenHeight != lastScreenHeight) {
-//            if (centered)
-//                centerRootComponent();
-//
-//            rootComponent.receiveGuiScaleChange();
-//        }
-//
-//        lastScreenWidth = screenWidth;
-//        lastScreenHeight = screenHeight;
-//
-//        Minecraft.getInstance().setScreen(this);
+        Window window = Minecraft.getInstance().getWindow();
+        int screenWidth = window.getGuiScaledWidth();
+        int screenHeight = window.getGuiScaledHeight();
+
+        if (screenWidth != lastScreenWidth || screenHeight != lastScreenHeight) {
+            if (centered)
+                centerRootComponent();
+
+            rootComponent().receiveGuiScaleChange();
+        }
+
+        lastScreenWidth = screenWidth;
+        lastScreenHeight = screenHeight;
+
+        Minecraft.getInstance().setScreen(this);
     }
 
     private void centerRootComponent() {
         int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 
-        rootComponent.at((screenWidth - rootComponent.getWidth()) / 2, (screenHeight - rootComponent.getHeight()) / 2);
-        rootComponent.recalculatePosition();
+        rootComponent().at((screenWidth - rootComponent().getWidth()) / 2, (screenHeight - rootComponent().getHeight()) / 2);
+        rootComponent().recalculatePosition();
+    }
+
+    private UIComponent rootComponent() {
+        return display.getRootComponent();
     }
 
     @Override
     public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
-        rootComponent.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+        display.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
     }
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        rootComponent.receiveMouseRelease(pMouseX, pMouseY);
+        rootComponent().receiveMouseRelease(pMouseX, pMouseY);
         return super.mouseReleased(pMouseX, pMouseY, pButton);
     }
 }
