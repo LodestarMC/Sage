@@ -6,11 +6,11 @@ import java.util.function.Consumer;
 
 public class ComponentEventHandler {
     protected UIComponent component;
-    protected Consumer<UIComponent> onClick;
-    protected Consumer<UIComponent> onHover;
-    protected Consumer<UIComponent> onNotHover;
-    protected Consumer<UIComponent> onGuiScaleChange;
-    protected OnRender onRender;
+    private Consumer<UIComponent> onClick;
+    private Consumer<UIComponent> onHover;
+    private Consumer<UIComponent> onNotHover;
+    private Consumer<UIComponent> onGuiScaleChange;
+    private OnRender onRender;
     private boolean initialized = false;
 
     private void initialize() {
