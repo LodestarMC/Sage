@@ -30,6 +30,12 @@ public class SpawnNotificationPacket extends Packet {
         if (!isClientRecipient(context))
             return;
 
-        NotificationManager.addNotificationDirect(Minecraft.getInstance().level, notification);
+        ClientHandler.spawnOnClient(notification);
+    }
+
+    static class ClientHandler {
+        public static void spawnOnClient(Notification notification) {
+            NotificationManager.addNotificationDirect(Minecraft.getInstance().level, notification);
+        }
     }
 }
