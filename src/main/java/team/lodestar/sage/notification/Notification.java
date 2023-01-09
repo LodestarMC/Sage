@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.INBTSerializable;
+import team.lodestar.sage.client.graphics.notification.NotificationRenderer;
 import team.lodestar.sage.notification.behavior.NotificationBehavior;
 import team.lodestar.sage.notification.behavior.NotificationBehaviorRegistry;
 
@@ -18,15 +19,26 @@ public class Notification implements INBTSerializable<CompoundTag> {
     private Vec3 position;
     private List<NotificationBehavior> behaviors = new ArrayList<>();
     private boolean needsSaving = false;
+    private NotificationRenderer renderer;
 
     private Notification() { }
 
-    public Notification(Vec3 position) {
+    public Notification(Vec3 position, NotificationRenderer renderer) {
         this.position = position;
+        this.renderer = renderer;
     }
 
-    public Notification(BlockPos position) {
-        this.position = new Vec3(position.getX(), position.getY(), position.getZ());
+    public Notification(BlockPos position, NotificationRenderer renderer) {
+        this(new Vec3(position.getX(), position.getY(), position.getZ()), renderer);
+    }
+
+    public Notification setRenderer(NotificationRenderer renderer) {
+        this.renderer = renderer;
+        return this;
+    }
+
+    public NotificationRenderer getRenderer() {
+        return renderer;
     }
 
     public Notification withBehavior(NotificationBehavior behavior) {
@@ -70,6 +82,8 @@ public class Notification implements INBTSerializable<CompoundTag> {
         tag.putDouble("y", position.y);
         tag.putDouble("z", position.z);
 
+        tag.putString("renderer", NotificationRenderer.NOTIFICATION_RENDERERS_REGISTRY.get().getKey(renderer).toString());
+
         ListTag behaviorList = new ListTag();
 
         for (NotificationBehavior behavior : behaviors) {
@@ -87,6 +101,10 @@ public class Notification implements INBTSerializable<CompoundTag> {
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         position = new Vec3(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"));
+
+        renderer = NotificationRenderer.NOTIFICATION_RENDERERS_REGISTRY.get().getValue(new ResourceLocation(nbt.getString("renderer")));
+        if (renderer == null) // fall back to default renderer
+            renderer = NotificationRenderer.DEFAULT_RENDERER.get();
 
         ListTag behaviorList = nbt.getList("behaviors", Tag.TAG_COMPOUND);
 

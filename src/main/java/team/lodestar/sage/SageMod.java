@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 import team.lodestar.sage.capability.SageLevelChunkCapability;
+import team.lodestar.sage.client.graphics.notification.NotificationRenderer;
 import team.lodestar.sage.client.gui.SageScreen;
 import team.lodestar.sage.client.gui.components.TextComponent;
 import team.lodestar.sage.client.gui.components.*;
@@ -40,6 +41,7 @@ public class SageMod
     public SageMod()
     {
         NotificationBehaviorRegistry.registerNotifications();
+        NotificationRenderer.registerSageNotificationRenderers();
         MinecraftForge.EVENT_BUS.register(SageMod.class);
     }
 
@@ -60,7 +62,7 @@ public class SageMod
         // get all players
         event.getLevel().getServer().getPlayerList().getPlayers().forEach(player -> {
             if (player.position().distanceTo(Vec3.atCenterOf(event.getPos())) < 40)
-                NotificationManager.addNotification((Level) event.getLevel(), new Notification(Vec3.atCenterOf(event.getPos())), List.of(player));
+                NotificationManager.addNotification((Level) event.getLevel(), new Notification(Vec3.atCenterOf(event.getPos()), NotificationRenderer.DEFAULT_RENDERER.get()), List.of(player));
         });
     }
 
