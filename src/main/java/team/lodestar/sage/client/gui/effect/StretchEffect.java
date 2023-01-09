@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import team.lodestar.sage.client.gui.components.UIComponent;
 import team.lodestar.sage.client.gui.events.ComponentEventHandler;
 
-public class StretchEffect extends ComponentEventHandler {
+public class StretchEffect extends ComponentEventHandler implements ComposableEffect {
     private float originalWidth;
     private float originalHeight;
     private float deltaWidth;
@@ -27,6 +27,11 @@ public class StretchEffect extends ComponentEventHandler {
 
         if (originalHeight == 0)
             originalHeight = component.getHeight();
+    }
+
+    @Override
+    public float getAnimationProgress() {
+        return t;
     }
 
     public void stretch(UIComponent component) {
