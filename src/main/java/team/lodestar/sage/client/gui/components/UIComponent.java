@@ -23,7 +23,7 @@ public abstract class UIComponent {
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTicks) {
         partialTicks = pPartialTicks;
         eventHandlers.forEach(handler -> handler.invokeOnRender(pPartialTicks));
-        
+
         if (parent != null && parent.propagateHoverEvents) {
             if (parent.containsPoint(pMouseX, pMouseY))
                 eventHandlers.forEach(handler -> handler.invokeOnHover());
@@ -157,6 +157,13 @@ public abstract class UIComponent {
 
         for (UIComponent component : children)
             component.receiveGuiScaleChange();
+    }
+
+    public void receiveOnShow() {
+        eventHandlers.forEach(handler -> handler.invokeOnShow());
+
+        for (UIComponent component : children)
+            component.receiveOnShow();
     }
 
     private boolean containsPoint(double x, double y) {
