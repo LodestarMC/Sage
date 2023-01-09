@@ -82,7 +82,7 @@ public class Notification implements INBTSerializable<CompoundTag> {
         tag.putDouble("y", position.y);
         tag.putDouble("z", position.z);
 
-        tag.putString("renderer", NotificationRenderer.NOTIFICATION_RENDERERS_REGISTRY.get().getKey(renderer).toString());
+        tag.putString("renderer", NotificationRenderer.getKey(renderer).toString());
 
         ListTag behaviorList = new ListTag();
 
@@ -102,9 +102,9 @@ public class Notification implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(CompoundTag nbt) {
         position = new Vec3(nbt.getDouble("x"), nbt.getDouble("y"), nbt.getDouble("z"));
 
-        renderer = NotificationRenderer.NOTIFICATION_RENDERERS_REGISTRY.get().getValue(new ResourceLocation(nbt.getString("renderer")));
+        renderer = NotificationRenderer.getRenderer(new ResourceLocation(nbt.getString("renderer")));
         if (renderer == null) // fall back to default renderer
-            renderer = NotificationRenderer.DEFAULT_RENDERER.get();
+            renderer = NotificationRenderer.DEFAULT_RENDERER;
 
         ListTag behaviorList = nbt.getList("behaviors", Tag.TAG_COMPOUND);
 
