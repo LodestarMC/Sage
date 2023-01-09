@@ -1,6 +1,7 @@
 package team.lodestar.sage;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -18,6 +19,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 import team.lodestar.sage.capability.SageLevelChunkCapability;
 import team.lodestar.sage.client.graphics.notification.NotificationRenderer;
+import team.lodestar.sage.client.gui.SageScreen;
+import team.lodestar.sage.client.gui.components.UIComponent;
 import team.lodestar.sage.network.PacketHandler;
 import team.lodestar.sage.notification.Notification;
 import team.lodestar.sage.notification.NotificationManager;
@@ -171,3 +174,11 @@ public class SageMod
 //        TEST_SCREEN.show();
 //    }
 //}
+
+class EntryLogTest {
+    private static SageScreen ENTRYLOG_SCREEN = new SageScreen(GameNarrator.NO_TITLE, EntryLogTest::setup);
+
+    private static UIComponent setup() {
+        UIComponent panelComponent
+    }
+}

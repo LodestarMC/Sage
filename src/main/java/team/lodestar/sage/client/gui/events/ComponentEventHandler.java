@@ -10,6 +10,7 @@ public class ComponentEventHandler {
     protected Consumer<UIComponent> onHover;
     protected Consumer<UIComponent> onNotHover;
     protected Consumer<UIComponent> onGuiScaleChange;
+    protected OnRender onRender;
     private boolean initialized = false;
 
     private void initialize() {
@@ -49,6 +50,11 @@ public class ComponentEventHandler {
         return this;
     }
 
+    public ComponentEventHandler onRender(OnRender onRender) {
+        this.onRender = onRender;
+        return this;
+    }
+
     public void invokeOnClick() {
         if (onClick != null)
             onClick.accept(component);
@@ -67,5 +73,14 @@ public class ComponentEventHandler {
     public void invokeOnGuiScaleChange() {
         if (onGuiScaleChange != null)
             onGuiScaleChange.accept(component);
+    }
+
+    public void invokeOnRender(float partialTicks) {
+        if (onRender != null)
+            onRender.onRender(component, partialTicks);
+    }
+
+    interface OnRender {
+        void onRender(UIComponent component, float partialTicks);
     }
 }

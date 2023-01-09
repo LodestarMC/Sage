@@ -22,7 +22,8 @@ public abstract class UIComponent {
 
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTicks) {
         partialTicks = pPartialTicks;
-
+        eventHandlers.forEach(handler -> handler.invokeOnRender(pPartialTicks));
+        
         if (parent != null && parent.propagateHoverEvents) {
             if (parent.containsPoint(pMouseX, pMouseY))
                 eventHandlers.forEach(handler -> handler.invokeOnHover());
