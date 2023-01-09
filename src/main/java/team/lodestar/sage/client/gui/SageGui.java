@@ -14,12 +14,18 @@ public class SageGui {
 
     private SageDisplay display;
     private boolean visible = true;
+    private boolean shownBefore = false;
 
     public SageGui(Supplier<UIComponent> componentSupplier) {
         display = new SageDisplay(componentSupplier);
     }
 
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        if (!shownBefore) {
+            display.receiveOnShow();
+            shownBefore = true;
+        }
+        
         display.render(poseStack, mouseX, mouseY, partialTicks);
     }
 
