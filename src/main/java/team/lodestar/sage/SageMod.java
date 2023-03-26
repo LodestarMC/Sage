@@ -175,10 +175,10 @@ public class SageMod
 //    }
 //}
 
-class EntryLogTest {
-    private static SageScreen ENTRYLOG_SCREEN = new SageScreen(GameNarrator.NO_TITLE, EntryLogTest::setup);
-
-    private static UIComponent setup() {
-        UIComponent panelComponent
-    }
-}
+//class EntryLogTest {
+//    private static SageScreen ENTRYLOG_SCREEN = new SageScreen(GameNarrator.NO_TITLE, EntryLogTest::setup);
+//
+//    private static UIComponent setup() {
+//        UIComponent panelComponent
+//    }
+//}

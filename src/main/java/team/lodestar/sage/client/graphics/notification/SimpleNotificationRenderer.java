@@ -19,8 +19,6 @@ import team.lodestar.sage.notification.Notification;
 
 import java.awt.*;
 
-import static team.lodestar.lodestone.helpers.RenderHelper.FULL_BRIGHT;
-
 // TODO: Can we include more fields for customization?
 public class SimpleNotificationRenderer extends NotificationRenderer {
 
@@ -65,9 +63,6 @@ public class SimpleNotificationRenderer extends NotificationRenderer {
         VertexConsumer consumer = RenderHandler.DELAYED_RENDER.getBuffer(renderType);
         VFXBuilders.createWorld()
                 .setPosColorTexLightmapDefaultFormat()
-                .setColor(Color.WHITE)
-                .setAlpha(1f)
-                .setLight(FULL_BRIGHT)
                 .renderQuad(consumer, poseStack, scale);
 
         poseStack.popPose();
