@@ -13,19 +13,18 @@ gaga
 [[dependencies.sage]]
     modId="forge"
     mandatory=true
-    versionRange="[43,)"
+    versionRange="[43.2,)"
     ordering="NONE"
     side="BOTH"
-# Here's another dependency
 [[dependencies.sage]]
     modId="minecraft"
     mandatory=true
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"
-    versionRange="[1.19.2,)"
 [[dependencies.sage]]
     modId="lodestone"
     mandatory=true
-    ordering="NONE"
     versionRange="[1.19.2-1.4,)"
+    ordering="NONE"
     side="BOTH"
